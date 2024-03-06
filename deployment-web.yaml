@@ -46,7 +46,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: yoda.192.168.15.16.nip.io
+    - host: yoda.192.168.67.2.nip.io
       http:
         paths:
         - path: /
