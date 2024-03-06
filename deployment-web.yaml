@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yoda
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yoda
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "80"
+      labels:
+        app: yoda
+    spec:
+     containers:
+       - name: yoda
+         image: ${REPO}
+         ports:
+          - containerPort: 3000
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: yoda-service
+spec:
+  selector:
+    app: yoda
+  ports:
+  - port: 3000
+  type: NodePort
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yoda-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: yoda.192.168.15.16.nip.io
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: yoda-service
+              port:
+                number: 3000
+
