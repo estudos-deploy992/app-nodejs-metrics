@@ -19,7 +19,7 @@ spec:
     spec:
      containers:
        - name: yoda
-         image: ${REPO}
+         image: gblbjj/yoda:$VERSION
          ports:
           - containerPort: 3000
 
